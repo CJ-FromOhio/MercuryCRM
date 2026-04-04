@@ -1,0 +1,36 @@
+package com.tropia.mercuryapp.entity;
+
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.time.Instant;
+import java.util.List;
+
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Getter
+@Setter
+@ToString(exclude = {"workers"})
+@EqualsAndHashCode(exclude = {"workers","address"})
+@Table(name = "company")
+@Entity
+public class Company {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @Column(name = "name", nullable = false, unique = true)
+    private String name;
+    @Column(name = "address")
+    private String address;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "director_id")
+    private User director;
+    @Column(name = "created_at")
+    private Instant createdAt;
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "company_workers",
+            joinColumns = @JoinColumn(name = "company_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private List<User> workers;
+}
