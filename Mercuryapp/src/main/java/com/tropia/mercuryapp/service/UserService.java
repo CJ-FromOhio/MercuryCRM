@@ -1,6 +1,7 @@
 package com.tropia.mercuryapp.service;
 
-import com.tropia.mercuryapp.dto.CreateUserDto;
+import com.tropia.mercuryapp.dto.User.CreateUserDto;
+import com.tropia.mercuryapp.dto.User.ReadUserDto;
 import com.tropia.mercuryapp.entity.Role;
 import com.tropia.mercuryapp.entity.User;
 import com.tropia.mercuryapp.repository.UserJpaRepository;
@@ -18,7 +19,7 @@ public class UserService {
     private final UserJpaRepository userJpaRepository;
 
     @Transactional
-    public User createUser(CreateUserDto dto){
+    public ReadUserDto createUser(CreateUserDto dto){
         if(!dto.password().equals(dto.passwordConfirmation())){
             throw new IllegalArgumentException("Passwords not equals");
         }
@@ -32,6 +33,14 @@ public class UserService {
                 .role(Role.ROLE_OWNER)
                 .company(null)
                 .build();
-        return userJpaRepository.save(user);
+        userJpaRepository.save(user);
+        return ReadUserDto.builder()
+                .id(user.getId())
+                .username(user.getUsername())
+                .firstname(user.getFirstName())
+                .lastname(user.getLastName())
+                .email(user.getEmail())
+                .role(user.getRole())
+                .build();
     }
 }
