@@ -33,7 +33,7 @@ public class Task {
     private String description;
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private TaskStatus status;
     @Column(name = "due_date")
     private Instant deadline;
     @Column(name = "created_at", nullable = false)

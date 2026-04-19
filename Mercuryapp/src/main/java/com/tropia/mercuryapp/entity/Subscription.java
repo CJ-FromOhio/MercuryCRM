@@ -4,14 +4,16 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Getter
 @Setter
-@ToString(exclude = {"company","plan"})
-@EqualsAndHashCode
+@ToString(exclude = {"company", "plan", "transactions"})
+@EqualsAndHashCode(exclude = {"company", "plan", "transactions"})
 @Table(name = "subscriptions")
 @Entity
 public class Subscription {
@@ -24,6 +26,13 @@ public class Subscription {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "plan_id")
     private SubscriptionPlan plan;
+    @OneToMany(
+            mappedBy = "subscription",
+            cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY
+    )
+    @Builder.Default
+    private List<PaymentTransaction> transactions =  new ArrayList<>();
     @Column(name = "start_date")
     private Instant startDate;
     @Column(name = "end_date")
