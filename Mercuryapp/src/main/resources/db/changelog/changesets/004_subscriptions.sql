@@ -8,7 +8,7 @@ CREATE TABLE subscription_plans(
     price DECIMAL(10,2) NOT NULL ,
     currency varchar(16) NOT NULL,
     max_workers INTEGER NOT NULL,
-    active BOOLEAN NOT NULL DEFAULT TRUE
+    active BOOLEAN DEFAULT FALSE
 );
 
 --changeset tropia:8
