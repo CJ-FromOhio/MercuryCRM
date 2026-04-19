@@ -33,4 +33,11 @@ public class Company {
             fetch = FetchType.LAZY
     )
     private List<User> workers;
+
+    public void setDirector(User director) {
+        this.director = director;
+        if(director != null){
+            director.setCompany(this);
+        }
+    }
 }

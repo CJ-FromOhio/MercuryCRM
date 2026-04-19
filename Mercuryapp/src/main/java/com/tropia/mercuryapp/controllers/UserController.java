@@ -7,10 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/user")
@@ -20,7 +17,11 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping()
-    public ResponseEntity<ReadUserDto>  createUser(@RequestBody CreateUserDto createUserDto) {
+    public ResponseEntity<ReadUserDto>  create(@RequestBody CreateUserDto createUserDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.createUser(createUserDto));
+    }
+    @GetMapping("/{id}")
+    public ResponseEntity<ReadUserDto> findById(@PathVariable Long id) {
+        return ResponseEntity.ok(userService.findById(id));
     }
 }

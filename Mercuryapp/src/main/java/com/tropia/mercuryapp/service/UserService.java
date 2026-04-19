@@ -9,6 +9,7 @@ import com.tropia.mercuryapp.repository.UserJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.Instant;
 
@@ -31,5 +32,16 @@ public class UserService {
         user.setCreatedAt(Instant.now());
         userJpaRepository.save(user);
         return userMapper.entityToDto(user);
+    }
+    @Transactional(readOnly = true)
+    public ReadUserDto findById(Long id){
+        return userJpaRepository.findById(id)
+                .map(userMapper::entityToDto)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+    }
+    @Transactional(readOnly = true)
+    public User getById(Long id){
+        return userJpaRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
     }
 }

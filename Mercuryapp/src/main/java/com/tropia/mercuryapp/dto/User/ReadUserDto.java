@@ -7,8 +7,8 @@ import lombok.Builder;
 public record ReadUserDto(
         Long id,
         String username,
-        String firstname,
-        String lastname,
+        String firstName,
+        String lastName,
         String email,
         Role role
 ) {
