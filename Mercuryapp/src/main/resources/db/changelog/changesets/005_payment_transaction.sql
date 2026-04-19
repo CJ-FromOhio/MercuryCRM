@@ -1,6 +1,6 @@
 --liquibase formatted sql
 
---changeset tropia:10
+--changeset tropia:9
 CREATE TABLE payment_transaction(
     id BIGSERIAL PRIMARY KEY ,
     transaction_id VARCHAR(64) NOT NULL UNIQUE,

@@ -31,10 +31,3 @@ CREATE TABLE tasks
     due_date    TIMESTAMP,
     created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
---changeset tropia:4
-CREATE TABLE company_workers
-(
-    company_id BIGINT REFERENCES company (id),
-    user_id    BIGINT REFERENCES users (id),
-    PRIMARY KEY (company_id, user_id)
-);

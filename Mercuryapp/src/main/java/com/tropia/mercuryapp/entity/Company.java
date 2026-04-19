@@ -28,9 +28,9 @@ public class Company {
     private User director;
     @Column(name = "created_at")
     private Instant createdAt;
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "company_workers",
-            joinColumns = @JoinColumn(name = "company_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    @OneToMany(
+            mappedBy = "company",
+            fetch = FetchType.LAZY
+    )
     private List<User> workers;
 }

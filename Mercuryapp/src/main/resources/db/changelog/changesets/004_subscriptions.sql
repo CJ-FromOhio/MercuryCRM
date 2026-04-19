@@ -1,6 +1,6 @@
 --liquibase formatted sql
 
---changeset tropia:8
+--changeset tropia:7
 CREATE TABLE subscription_plans(
     id BIGSERIAL PRIMARY KEY,
     name VARCHAR(32) NOT NULL,
@@ -11,7 +11,7 @@ CREATE TABLE subscription_plans(
     active BOOLEAN NOT NULL DEFAULT TRUE
 );
 
---changeset tropia:9
+--changeset tropia:8
 CREATE TABLE subscriptions(
     id BIGSERIAL PRIMARY KEY,
     company_id BIGINT REFERENCES company(id) NOT NULL ,

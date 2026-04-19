@@ -35,8 +35,6 @@ public class User {
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinTable(name = "company_workers",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "company_id"))
+    @JoinColumn(name = "company_id")
     private Company company;
 }

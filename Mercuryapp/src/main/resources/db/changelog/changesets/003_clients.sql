@@ -1,6 +1,6 @@
 --liquibase formatted sql
 
---changeset tropia:6
+--changeset tropia:5
 CREATE TABLE clients(
     id BIGSERIAL PRIMARY KEY,
     firstname VARCHAR(64) not null,
@@ -10,6 +10,6 @@ CREATE TABLE clients(
     company_id BIGINT REFERENCES company(id)
 );
 
---changeset tropia:7
+--changeset tropia:6
 ALTER TABLE tasks
     ADD COLUMN client_id BIGINT REFERENCES clients(id);
