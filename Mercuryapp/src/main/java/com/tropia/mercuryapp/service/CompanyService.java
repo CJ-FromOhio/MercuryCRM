@@ -17,16 +17,19 @@ import java.time.Instant;
 public class CompanyService {
     private final CompanyJpaRepository companyRepository;
     private final UserService userService;
+    private final SubscriptionService subscriptionService;
     private final CompanyMapper companyMapper;
+
 
     @Transactional
     public ReadCompanyDto create(CreateCompanyDto dto, Long directorId) {
         User director = userService.getById(directorId);
         Company company = companyMapper.сreateToEntity(dto);
         company.setCreatedAt(Instant.now());
-        companyRepository.save(company);
         company.setDirector(director);
-        return companyMapper.entityToDto(company);
+        Company savedCompany = companyRepository.save(company);
+        subscriptionService.createSubscription(dto.planId(), savedCompany);
+        return companyMapper.entityToDto(savedCompany);
     }
     @Transactional(readOnly = true)
     public ReadCompanyDto findById(Long id) {

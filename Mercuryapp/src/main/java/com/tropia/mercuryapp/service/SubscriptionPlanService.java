@@ -30,6 +30,18 @@ public class SubscriptionPlanService {
         return subscriptionPlanMapper.entityToDtoList(subscriptionPlanJpaRepository
                 .findSubscriptionPlansByActiveIsTrue());
     }
+    @Transactional(readOnly = true)
+    public ReadSubscriptionPlanDto findActivePlanById(Long id) {
+        return subscriptionPlanMapper.entityToDto(subscriptionPlanJpaRepository
+                .findByIdAndActiveTrue(id)
+                .orElseThrow(() -> new RuntimeException("Subscription plan is not active or null")));
+    }
+    @Transactional(readOnly = true)
+    public SubscriptionPlan getActivePlanById(Long id) {
+        return subscriptionPlanJpaRepository
+                .findByIdAndActiveTrue(id)
+                .orElseThrow(() -> new RuntimeException("Subscription plan is not active or null"));
+    }
     @Transactional()
     public ReadSubscriptionPlanDto setActive(Long id) {
         SubscriptionPlan entity = subscriptionPlanJpaRepository.findById(id).orElseThrow(() -> new RuntimeException("Subscription Plan Not Found"));

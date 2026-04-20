@@ -5,6 +5,7 @@ import lombok.Builder;
 @Builder
 public record CreateCompanyDto(
         String name,
-        String address
+        String address,
+        Long planId
 ) {
 }
