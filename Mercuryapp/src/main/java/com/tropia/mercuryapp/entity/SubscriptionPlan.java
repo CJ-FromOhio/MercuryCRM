@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.time.temporal.ChronoUnit;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -28,6 +29,11 @@ public class SubscriptionPlan {
     private String currency;
     @Column(name = "max_workers", nullable = false)
     private Integer maxWorkers;
+    @Column(name = "duration_value", nullable = false)
+    private Integer durationValue;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "duration_unit", nullable = false)
+    private ChronoUnit durationUnit;
     @Column(name = "active", nullable = false)
     private Boolean active;
 }

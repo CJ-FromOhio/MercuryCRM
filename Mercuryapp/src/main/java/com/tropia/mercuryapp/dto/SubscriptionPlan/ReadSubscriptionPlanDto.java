@@ -4,6 +4,7 @@ import jakarta.persistence.Basic;
 import lombok.Builder;
 
 import java.math.BigDecimal;
+import java.time.temporal.ChronoUnit;
 
 @Builder
 public record ReadSubscriptionPlanDto(
@@ -13,6 +14,8 @@ public record ReadSubscriptionPlanDto(
         BigDecimal price,
         String currency,
         Integer maxWorkers,
+        Integer durationValue,
+        ChronoUnit durationUnit,
         Boolean active
 ) {
 }
