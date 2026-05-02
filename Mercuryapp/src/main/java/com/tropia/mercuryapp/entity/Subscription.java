@@ -39,4 +39,9 @@ public class Subscription {
     private Instant endDate;
     @Column(name = "active")
     private Boolean active;
+
+    public void addTransaction(PaymentTransaction transaction) {
+        transactions.add(transaction);
+        transaction.setSubscription(this);
+    }
 }

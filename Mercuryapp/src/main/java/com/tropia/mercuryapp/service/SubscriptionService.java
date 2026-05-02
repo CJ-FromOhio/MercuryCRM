@@ -1,9 +1,7 @@
 package com.tropia.mercuryapp.service;
 
 import com.tropia.mercuryapp.dto.Subscription.ReadSubscriptionDto;
-import com.tropia.mercuryapp.entity.Company;
-import com.tropia.mercuryapp.entity.Subscription;
-import com.tropia.mercuryapp.entity.SubscriptionPlan;
+import com.tropia.mercuryapp.entity.*;
 import com.tropia.mercuryapp.mappers.SubscriptionMapper;
 import com.tropia.mercuryapp.repository.SubsriptionJpaRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,25 +16,31 @@ import java.time.ZoneId;
 public class SubscriptionService {
     private final SubsriptionJpaRepository subscriptionRepository;
     private final SubscriptionPlanService subscriptionPlanService;
+    private final PaymentTransactionService paymentTransactionService;
     private final SubscriptionMapper subscriptionMapper;
 
     @Transactional
     public Subscription createSubscription(Long plan_id, Company company) {
-        SubscriptionPlan subscriptionPlan = subscriptionPlanService
+        SubscriptionPlan sp = subscriptionPlanService
                 .getActivePlanById(plan_id);
 
         Instant start = Instant.now();
         Instant end = start.atZone(ZoneId.systemDefault())
-                .plus(subscriptionPlan.getDurationValue(), subscriptionPlan.getDurationUnit())
+                .plus(sp.getDurationValue(), sp.getDurationUnit())
                 .toInstant();
 
+        PaymentTransaction pt = paymentTransactionService.create(sp.getPrice(), sp.getCurrency(), company);
+        if (pt.getStatus().equals(PaymentStatus.FAILED)) {
+            throw new RuntimeException("Payment failed for company: " + company.getId());
+        }
         Subscription subscription = Subscription.builder()
-                .plan(subscriptionPlan)
+                .plan(sp)
                 .company(company)
                 .startDate(start)
                 .endDate(end)
                 .active(true)
                 .build();
+        subscription.addTransaction(pt);
         return subscriptionRepository.save(subscription);
     }
     @Transactional(readOnly = true)

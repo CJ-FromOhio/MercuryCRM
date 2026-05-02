@@ -25,6 +25,9 @@ public class PaymentTransaction {
     @Column(name = "payment_status", nullable = false)
     private PaymentStatus status;
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "company_id")
+    private Company company;
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "subscription_id")
     private Subscription subscription;
     @Column(name = "price", nullable = false, scale = 2)

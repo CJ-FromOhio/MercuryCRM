@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor
@@ -26,6 +27,13 @@ public class Company {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "director_id")
     private User director;
+    @OneToMany(
+            mappedBy = "company",
+            cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY
+    )
+    @Builder.Default
+    private List<PaymentTransaction> transactions =  new ArrayList<>();
     @Column(name = "created_at")
     private Instant createdAt;
     @OneToMany(

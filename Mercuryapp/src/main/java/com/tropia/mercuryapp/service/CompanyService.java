@@ -28,7 +28,7 @@ public class CompanyService {
         company.setCreatedAt(Instant.now());
         company.setDirector(director);
         Company savedCompany = companyRepository.save(company);
-        subscriptionService.createSubscription(dto.planId(), savedCompany);
+        subscriptionService.createSubscription(dto.plan_id(), savedCompany);
         return companyMapper.entityToDto(savedCompany);
     }
     @Transactional(readOnly = true)
