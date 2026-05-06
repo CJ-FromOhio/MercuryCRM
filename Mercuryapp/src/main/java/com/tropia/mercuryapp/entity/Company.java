@@ -34,6 +34,11 @@ public class Company {
     )
     @Builder.Default
     private List<PaymentTransaction> transactions =  new ArrayList<>();
+    @OneToMany(
+            mappedBy = "company",
+            fetch = FetchType.LAZY
+    )
+    private List<Subscription> activeSubscription;
     @Column(name = "created_at")
     private Instant createdAt;
     @OneToMany(
@@ -43,9 +48,15 @@ public class Company {
     private List<User> workers = new ArrayList<>();
 
     public void setDirector(User director) {
-        this.director = director;
         if(director != null){
             director.setCompany(this);
+            this.director = director;
+        }
+    }
+    public void addWorker(User worker) {
+        if(worker != null){
+            this.workers.add(worker);
+            worker.setCompany(this);
         }
     }
 }

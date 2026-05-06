@@ -1,6 +1,7 @@
 package com.tropia.mercuryapp.controllers;
 
 import com.tropia.mercuryapp.dto.User.CreateUserDto;
+import com.tropia.mercuryapp.dto.User.CreateUserWorkerDto;
 import com.tropia.mercuryapp.dto.User.ReadUserDto;
 import com.tropia.mercuryapp.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,11 @@ public class UserController {
     @PostMapping()
     public ResponseEntity<ReadUserDto>  create(@RequestBody CreateUserDto createUserDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.createUser(createUserDto));
+    }
+    @PostMapping("/addWorker/{directorId}")
+    public ResponseEntity<ReadUserDto>  create(@RequestBody CreateUserWorkerDto dto,
+                                               @PathVariable Long directorId) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(userService.createWorkerUser(dto, directorId));
     }
     @GetMapping("/{id}")
     public ResponseEntity<ReadUserDto> findById(@PathVariable Long id) {

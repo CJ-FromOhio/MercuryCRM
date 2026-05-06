@@ -1,6 +1,7 @@
 package com.tropia.mercuryapp.service;
 
 import com.tropia.mercuryapp.dto.User.CreateUserDto;
+import com.tropia.mercuryapp.dto.User.CreateUserWorkerDto;
 import com.tropia.mercuryapp.dto.User.ReadUserDto;
 import com.tropia.mercuryapp.entity.Role;
 import com.tropia.mercuryapp.entity.User;
@@ -42,5 +43,27 @@ public class UserService {
     public User getById(Long id){
         return userJpaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
+    }
+    @Transactional
+    public ReadUserDto createWorkerUser(CreateUserWorkerDto dto, Long id){
+        if(!dto.password().equals(dto.passwordConfirmation())){
+            throw new IllegalArgumentException("Passwords not equals");
+        }
+
+        User worker = userMapper.createWorkerToEntity(dto);
+        User director = getById(id);
+        worker.setRole(Role.ROLE_WORKER);
+        worker.setCreatedAt(Instant.now());
+        Integer workers = userJpaRepository.countByCompanyId(director.getCompany().getId());
+        Integer maxWorkers = director.getCompany()
+                .getActiveSubscription()
+                .getFirst()
+                .getPlan()
+                .getMaxWorkers();
+        if(workers >= maxWorkers) {
+            throw new RuntimeException("you have max workers in company. Upgrade your subscription for add more workers.");
+        }
+        director.getCompany().addWorker(worker);
+        return userMapper.entityToDto(userJpaRepository.save(worker));
     }
 }
