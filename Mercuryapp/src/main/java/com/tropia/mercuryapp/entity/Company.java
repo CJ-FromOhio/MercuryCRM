@@ -40,7 +40,7 @@ public class Company {
             mappedBy = "company",
             fetch = FetchType.LAZY
     )
-    private List<User> workers;
+    private List<User> workers = new ArrayList<>();
 
     public void setDirector(User director) {
         this.director = director;

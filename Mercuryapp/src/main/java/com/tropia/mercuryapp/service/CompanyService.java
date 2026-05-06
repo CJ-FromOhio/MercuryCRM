@@ -24,8 +24,11 @@ public class CompanyService {
     @Transactional
     public ReadCompanyDto create(CreateCompanyDto dto, Long directorId) {
         User director = userService.getById(directorId);
-        Company company = companyMapper.сreateToEntity(dto);
+        Company company = companyMapper.createToEntity(dto);
         company.setCreatedAt(Instant.now());
+        if(director.getCompany()!=null){
+            throw new RuntimeException("Sorry but you can create only one company");
+        }
         company.setDirector(director);
         Company savedCompany = companyRepository.save(company);
         subscriptionService.createSubscription(dto.plan_id(), savedCompany);

@@ -12,7 +12,7 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface SubscriptionPlanMapper {
-    SubscriptionPlan сreateToEntity(CreateSubscriptionPlanDto dto);
+    SubscriptionPlan createToEntity(CreateSubscriptionPlanDto dto);
     ReadSubscriptionPlanDto entityToDto(SubscriptionPlan entity);
     List<ReadSubscriptionPlanDto> entityToDtoList(List<SubscriptionPlan> entities);
 }

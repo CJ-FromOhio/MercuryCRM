@@ -21,7 +21,7 @@ public class SubscriptionPlanService {
 
     @Transactional
     public ReadSubscriptionPlanDto create(CreateSubscriptionPlanDto dto) {
-        SubscriptionPlan entity = subscriptionPlanMapper.сreateToEntity(dto);
+        SubscriptionPlan entity = subscriptionPlanMapper.createToEntity(dto);
         subscriptionPlanJpaRepository.save(entity);
         return subscriptionPlanMapper.entityToDto(entity);
     }

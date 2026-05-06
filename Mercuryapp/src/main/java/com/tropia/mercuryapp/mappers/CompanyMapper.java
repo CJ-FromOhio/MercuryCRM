@@ -10,7 +10,7 @@ import java.util.List;
 
 @Mapper(componentModel = "spring", uses = {UserMapper.class})
 public interface CompanyMapper {
-    Company сreateToEntity(CreateCompanyDto dto);
+    Company createToEntity(CreateCompanyDto dto);
     @Mapping(target = "directorId", source = "director.id")
     ReadCompanyDto entityToDto(Company entity);
     @Mapping(target = "directorId", source = "director.id")

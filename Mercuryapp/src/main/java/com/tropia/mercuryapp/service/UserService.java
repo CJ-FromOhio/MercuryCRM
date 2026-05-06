@@ -9,7 +9,6 @@ import com.tropia.mercuryapp.repository.UserJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.time.Instant;
 
@@ -26,7 +25,7 @@ public class UserService {
         if(!dto.password().equals(dto.passwordConfirmation())){
             throw new IllegalArgumentException("Passwords not equals");
         }
-        User user = userMapper.сreateToEntity(dto);
+        User user = userMapper.createToEntity(dto);
         user.setRole(Role.ROLE_OWNER);
         user.setCompany(null);
         user.setCreatedAt(Instant.now());
