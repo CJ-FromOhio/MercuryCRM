@@ -46,6 +46,17 @@ public class Company {
             fetch = FetchType.LAZY
     )
     private List<User> workers = new ArrayList<>();
+    @OneToMany(
+            mappedBy = "company",
+            fetch = FetchType.LAZY
+    )
+    private List<Client> clients = new ArrayList<>();
+    @OneToMany(
+            mappedBy = "company",
+            fetch = FetchType.LAZY
+    )
+    private List<Task> tasks = new ArrayList<>();
+
 
     public void setDirector(User director) {
         if(director != null){
@@ -57,6 +68,12 @@ public class Company {
         if(worker != null){
             this.workers.add(worker);
             worker.setCompany(this);
+        }
+    }
+    public void addClient(Client client) {
+        if(client != null){
+            this.clients.add(client);
+            client.setCompany(this);
         }
     }
 }

@@ -46,4 +46,9 @@ public class CompanyService {
                 .map(companyMapper::entityToDto)
                 .orElseThrow(() -> new RuntimeException("Company not found"));
     }
+    @Transactional(readOnly = true)
+    public Company getById(Long id) {
+        return companyRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Company not found"));
+    }
 }

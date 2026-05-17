@@ -27,6 +27,9 @@ public class Task {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "client_id")
     private Client client;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "company_id")
+    private Company company;
     @Column(name = "title", nullable = false)
     private String title;
     @Column(name = "description", nullable = false)
