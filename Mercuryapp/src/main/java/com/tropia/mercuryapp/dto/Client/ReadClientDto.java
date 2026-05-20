@@ -5,6 +5,7 @@ public record ReadClientDto(
         String firstName,
         String lastName,
         String phoneNumber,
-        String email
+        String email,
+        Long companyId
 ) {
 }

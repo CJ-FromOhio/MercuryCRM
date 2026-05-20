@@ -11,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -50,5 +52,11 @@ public class ClientService {
         return clientJpaRepository
                 .findById(clientId)
                 .orElseThrow(() -> new RuntimeException("Client not found by id: " + clientId));
+    }
+    @Transactional(readOnly = true)
+    public List<ReadClientDto> getByCompanyId(Long companyId) {
+        return clientJpaRepository
+                .findByCompanyId(companyId)
+                .stream().map(clientMapper::entityToDto).toList();
     }
 }

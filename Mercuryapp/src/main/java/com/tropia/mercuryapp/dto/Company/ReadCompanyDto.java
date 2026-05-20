@@ -1,5 +1,6 @@
 package com.tropia.mercuryapp.dto.Company;
 
+import com.tropia.mercuryapp.dto.Client.ReadClientDto;
 import com.tropia.mercuryapp.dto.User.ReadUserDto;
 import lombok.Builder;
 
@@ -13,6 +14,7 @@ public record ReadCompanyDto(
         String address,
         Long directorId,
         List<ReadUserDto> workers,
+        List<ReadClientDto> clients,
         Instant createdAt
 ) {
 }
