@@ -9,6 +9,8 @@ public record CreateTaskDto(
         String description,
         Integer durationValue,
         ChronoUnit durationUnit,
-        Long clientId
+        Long clientId,
+        Long workerId,
+        Long assigneeId
 ) {
 }

@@ -1,9 +1,11 @@
 package com.tropia.mercuryapp.service;
 
+import com.tropia.mercuryapp.dto.Client.ReadClientDto;
 import com.tropia.mercuryapp.dto.Task.CreateTaskDto;
 import com.tropia.mercuryapp.dto.Task.ReadTaskDto;
 import com.tropia.mercuryapp.entity.Client;
 import com.tropia.mercuryapp.entity.Task;
+import com.tropia.mercuryapp.entity.TaskStatus;
 import com.tropia.mercuryapp.entity.User;
 import com.tropia.mercuryapp.mappers.TaskMapper;
 import com.tropia.mercuryapp.repository.TaskJpaRepository;
@@ -14,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.time.ZoneId;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -26,14 +29,20 @@ public class TaskService {
     private final TaskMapper taskMapper;
 
     @Transactional
-    public ReadTaskDto createTask(CreateTaskDto createTaskDto, Long workerId, Long assigneeId) {
+    public ReadTaskDto createTask(CreateTaskDto createTaskDto) {
         if (createTaskDto.clientId() == null) {
             throw new RuntimeException("Client ID must not be null");
         }
 
-        User worker = userService.getById(workerId);
-        User manager = userService.getById(assigneeId);
+        User worker = userService.getById(createTaskDto.workerId());
+        User manager;
         Client client = clientService.getById(createTaskDto.clientId());
+
+        if (createTaskDto.assigneeId() != null) {
+            manager = userService.getById(createTaskDto.assigneeId());
+        } else {
+            manager = null;
+        }
 
         Instant now = Instant.now();
         Instant end = now.atZone(ZoneId.systemDefault())
@@ -45,18 +54,21 @@ public class TaskService {
                 .description(createTaskDto.description())
                 .assigned(manager)
                 .worker(worker)
+                .status(TaskStatus.NEW)
                 .company(worker.getCompany())
                 .createdAt(now)
                 .deadline(end)
                 .build();
         return taskMapper.entityToDto(taskJpaRepository.save(task));
     }
+
     @Transactional(readOnly = true)
     public ReadTaskDto findById(Long taskId) {
         return taskMapper.entityToDto(taskJpaRepository
                 .findById(taskId)
                 .orElseThrow(() -> new RuntimeException("Task not found by id: " + taskId)));
     }
+
     @Transactional(readOnly = true)
     public List<ReadTaskDto> findByCompanyId(Long companyId) {
         return taskJpaRepository
@@ -65,6 +77,7 @@ public class TaskService {
                 .map(taskMapper::entityToDto)
                 .toList();
     }
+
     @Transactional(readOnly = true)
     public List<ReadTaskDto> findByWorkerId(Long workerId) {
         return taskJpaRepository
@@ -74,9 +87,46 @@ public class TaskService {
                 .toList();
     }
     @Transactional(readOnly = true)
+    public List<ReadTaskDto> findByClientId(Long clientId) {
+        return taskJpaRepository
+                .findByClientId(clientId)
+                .stream()
+                .map(taskMapper::entityToDto)
+                .toList();
+    }
+
+    @Transactional(readOnly = true)
     public Task getById(Long taskId) {
         return taskJpaRepository
                 .findById(taskId)
                 .orElseThrow(() -> new RuntimeException("Task not found by id: " + taskId));
+    }
+
+    @Transactional(readOnly = true)
+    public List<ReadTaskDto> findTasks(Long companyId, Long workerId, Long clientId) {
+        List<ReadTaskDto> tasks;
+        if (companyId != null) {
+            tasks = taskJpaRepository
+                    .findByCompanyId(companyId)
+                    .stream()
+                    .map(taskMapper::entityToDto)
+                    .toList();
+            return tasks;
+        } else if (workerId != null) {
+            tasks = taskJpaRepository
+                    .findByWorkerId(workerId)
+                    .stream()
+                    .map(taskMapper::entityToDto)
+                    .toList();
+            return tasks;
+        } else if (clientId != null) {
+            tasks = taskJpaRepository
+                    .findByClientId(clientId)
+                    .stream()
+                    .map(taskMapper::entityToDto)
+                    .toList();
+            return tasks;
+        }
+        return Collections.emptyList();
     }
 }

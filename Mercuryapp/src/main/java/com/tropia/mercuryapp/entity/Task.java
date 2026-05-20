@@ -34,7 +34,7 @@ public class Task {
     private String title;
     @Column(name = "description", nullable = false)
     private String description;
-    @Column(name = "status", nullable = false)
+    @Column(name = "status")
     @Enumerated(EnumType.STRING)
     private TaskStatus status;
     @Column(name = "due_date")
