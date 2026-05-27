@@ -1,12 +1,11 @@
 package com.tropia.mercuryapp.service;
 
+import com.querydsl.core.BooleanBuilder;
 import com.tropia.mercuryapp.dto.Client.ReadClientDto;
 import com.tropia.mercuryapp.dto.Task.CreateTaskDto;
 import com.tropia.mercuryapp.dto.Task.ReadTaskDto;
-import com.tropia.mercuryapp.entity.Client;
-import com.tropia.mercuryapp.entity.Task;
-import com.tropia.mercuryapp.entity.TaskStatus;
-import com.tropia.mercuryapp.entity.User;
+import com.tropia.mercuryapp.dto.User.ReadUserDto;
+import com.tropia.mercuryapp.entity.*;
 import com.tropia.mercuryapp.mappers.TaskMapper;
 import com.tropia.mercuryapp.repository.TaskJpaRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +17,7 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.StreamSupport;
 
 @Service
 @RequiredArgsConstructor
@@ -103,29 +103,20 @@ public class TaskService {
 
     @Transactional(readOnly = true)
     public List<ReadTaskDto> findTasks(Long companyId, Long workerId, Long clientId) {
-        List<ReadTaskDto> tasks;
-        if (companyId != null) {
-            tasks = taskJpaRepository
-                    .findByCompanyId(companyId)
-                    .stream()
-                    .map(taskMapper::entityToDto)
-                    .toList();
-            return tasks;
-        } else if (workerId != null) {
-            tasks = taskJpaRepository
-                    .findByWorkerId(workerId)
-                    .stream()
-                    .map(taskMapper::entityToDto)
-                    .toList();
-            return tasks;
-        } else if (clientId != null) {
-            tasks = taskJpaRepository
-                    .findByClientId(clientId)
-                    .stream()
-                    .map(taskMapper::entityToDto)
-                    .toList();
-            return tasks;
+        QTask qTask = QTask.task;
+        BooleanBuilder predicate = new BooleanBuilder();
+        if(companyId != null) {
+            predicate.and(qTask.company.id.eq(companyId));
         }
-        return Collections.emptyList();
+        if(workerId != null) {
+            predicate.and(qTask.worker.id.eq(workerId));
+        }
+        if(clientId != null) {
+            predicate.and(qTask.client.id.eq(clientId));
+        }
+        Iterable<Task> tasks =  taskJpaRepository.findAll(predicate);
+        return StreamSupport.stream(tasks.spliterator(), false)
+                .map(taskMapper::entityToDto)
+                .toList();
     }
 }
