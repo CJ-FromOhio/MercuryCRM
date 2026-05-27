@@ -1,5 +1,10 @@
 package com.tropia.mercuryapp.entity;
 
 public enum PaymentStatus {
-    COMPLETED, FAILED
+    PENDING,
+    AUTHORIZED,
+    SUCCESSFUL,
+    FAILED,
+    CANCELED,
+    REFUNDED
 }

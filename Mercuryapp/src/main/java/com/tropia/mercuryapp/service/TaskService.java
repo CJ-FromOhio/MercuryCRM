@@ -35,15 +35,7 @@ public class TaskService {
         }
 
         User worker = userService.getById(createTaskDto.workerId());
-        User manager;
         Client client = clientService.getById(createTaskDto.clientId());
-
-        if (createTaskDto.assigneeId() != null) {
-            manager = userService.getById(createTaskDto.assigneeId());
-        } else {
-            manager = null;
-        }
-
         Instant now = Instant.now();
         Instant end = now.atZone(ZoneId.systemDefault())
                 .plus(createTaskDto.durationValue(), createTaskDto.durationUnit())
@@ -52,13 +44,20 @@ public class TaskService {
                 .client(client)
                 .title(createTaskDto.title())
                 .description(createTaskDto.description())
-                .assigned(manager)
                 .worker(worker)
-                .status(TaskStatus.NEW)
                 .company(worker.getCompany())
                 .createdAt(now)
                 .deadline(end)
                 .build();
+        if (createTaskDto.assigneeId() != null) {
+            User manager = userService.getById(createTaskDto.assigneeId());
+            task.setAssigned(manager);
+            task.setStatus(TaskStatus.TO_DO);
+        } else {
+            task.setAssigned(null);
+            task.setStatus(TaskStatus.IN_PROGRESS);
+        }
+
         return taskMapper.entityToDto(taskJpaRepository.save(task));
     }
 

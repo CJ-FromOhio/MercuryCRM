@@ -32,7 +32,6 @@ public class TaskController {
             @RequestParam(value = "workerId", required = false) Long workerId,
             @RequestParam(value = "clientId", required = false) Long clientId
     ) {
-        // Просто передаем всё в сервис
         return ResponseEntity.ok(taskService.findTasks(companyId, workerId, clientId));
     }
 }

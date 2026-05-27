@@ -27,7 +27,7 @@ public class PaymentTransactionService {
                 .transactionId(UUID.randomUUID().toString())
                 .price(amount)
                 .currency(currency)
-                .status(isSuccess ? PaymentStatus.COMPLETED : PaymentStatus.FAILED)
+                .status(isSuccess ? PaymentStatus.SUCCESSFUL : PaymentStatus.FAILED)
                 .createdAt(Instant.now())
                 .company(company)
                 .build();

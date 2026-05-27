@@ -1,7 +1,9 @@
 package com.tropia.mercuryapp.entity;
 
 public enum TaskStatus {
-    NEW,
+    TO_DO,
     IN_PROGRESS,
+    ON_REVIEW,
+    CANCELED,
     COMPLETED,
 }
