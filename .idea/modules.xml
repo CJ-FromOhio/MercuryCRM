@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/MercuryCRM.iml" filepath="$PROJECT_DIR$/MercuryCRM.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/Mercuryapp.main.iml" filepath="$PROJECT_DIR$/.idea/modules/Mercuryapp.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Mercuryapp.test.iml" filepath="$PROJECT_DIR$/.idea/modules/Mercuryapp.test.iml" />
     </modules>
   </component>
 </project>
